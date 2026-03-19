@@ -216,7 +216,7 @@
 
   <script src="supabase.js"></script>
   <script>
-    const ADMIN_EMAIL = 'admin@stylinx.com'; // Change to your email
+    const ADMIN_EMAIL = 'chrisngot17@gmail.com';
 
     // ── Navigation ──────────────────────────────────────────────
     function showTab(name) {
@@ -234,6 +234,7 @@
       SB.ready(async () => {
         const user = await SB.getUser();
         if (!user) { window.location.href = 'login.html'; return; }
+        if (user.email !== ADMIN_EMAIL) { window.location.href = 'index.html'; return; }
 
         document.getElementById('admin-greeting').textContent = 'Welcome, ' + (user.email || 'Admin');
 
