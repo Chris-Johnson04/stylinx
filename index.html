@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>STYLINX – Simple. Classy. Trendy.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Accueil.css">
+</head>
+<body>
+
+  <!-- Marquee bar -->
+  <div class="marquee-bar">
+    <div class="marquee-inner">
+      <span>New Collection 2026</span>
+      <span>Free Delivery Over ₹3,000</span>
+      <span>Easy Returns — 30 Days</span>
+      <span>Men · Women · Kids</span>
+      <span>New Collection 2025</span>
+      <span>Free Delivery Over ₹3,000</span>
+      <span>Easy Returns — 30 Days</span>
+      <span>Men · Women · Kids</span>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <h1 class="logo">STYLI<span>N</span>X</h1>
+    </div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#categories">Collections</a>
+      <a href="#products">Products</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <a href="panier.html" aria-label="Cart">🛒</a>
+      <a href="login.html" aria-label="Account">👤</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-left">
+      <p class="hero-eyebrow">New Season — Spring 2026</p>
+      <h1>Simple.<br>Classy.<br><em>Trendy.</em></h1>
+      <p class="hero-sub">Fashion designed for men, women, and children who want to express confidence and individuality through style.</p>
+      <div class="hero-cta">
+        <a href="#categories" class="btn-primary">Explore Collections →</a>
+        <a href="#products" class="btn-secondary">View Products</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-img-placeholder">
+        <div class="hero-big-letter">S</div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">3K+</div>
+          <div class="stat-label">Styles Available</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">98%</div>
+          <div class="stat-label">Happy Customers</div>
+        </div>
+      </div>
+      <div class="hero-badge">
+        <strong>New In</strong>
+        Spring / Summer Collection
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="categories" id="categories">
+    <div class="section-header reveal">
+      <div class="section-header-left">
+        <p class="section-label">Explore</p>
+        <h2 class="section-title">Shop by Category</h2>
+      </div>
+      <a href="#" class="view-all">All Categories</a>
+    </div>
+    <div class="cat-grid reveal">
+      <a class="cat-card" href="homme.html">
+        <div class="cat-bg">
+          <div class="cat-bg-inner cat-bg-men" style="min-height:360px; position:relative;">
+            <img src="homme.jpg" alt="Men Collection">
+          </div>
+        </div>
+        <div class="cat-overlay">
+          <div class="cat-num">01</div>
+          <h3>Men</h3>
+          <p>Street, casual &amp; classy</p>
+        </div>
+        <div class="cat-arrow">→</div>
+      </a>
+      <a class="cat-card" href="femme.html">
+        <div class="cat-bg">
+          <div class="cat-bg-inner cat-bg-women" style="min-height:360px; position:relative;">
+            <img src="femme.jpg" alt="Women Collection">
+          </div>
+        </div>
+        <div class="cat-overlay">
+          <div class="cat-num">02</div>
+          <h3>Women</h3>
+          <p>Chic, trendy &amp; comfy</p>
+        </div>
+        <div class="cat-arrow">→</div>
+      </a>
+      <a class="cat-card" href="enfant.html">
+        <div class="cat-bg">
+          <div class="cat-bg-inner cat-bg-kids" style="min-height:360px; position:relative;">
+            <img src="enfant.jpg" alt="Child Collection">
+          </div>
+        </div>
+        <div class="cat-overlay">
+          <div class="cat-num">03</div>
+          <h3>Kids</h3>
+          <p>Cool looks for little ones</p>
+        </div>
+        <div class="cat-arrow">→</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- New Arrivals -->
+  <section class="new-arrivals" id="new">
+    <div class="section-header reveal">
+      <div class="section-header-left">
+        <p class="section-label">Just Dropped</p>
+        <h2 class="section-title">New Arrivals</h2>
+      </div>
+      <a href="#" class="view-all">View All</a>
+    </div>
+    <div class="arrivals-track reveal">
+      <a class="arrival-card" href="nouveauté_homme.html">
+        <div class="arrival-img arrival-bg-men">
+          <img src="mnew.jpg" alt="Men Collection">
+          <div class="arrival-badge">New</div>
+          <button class="arrival-hover-btn">Discover →</button>
+        </div>
+        <div class="arrival-name">Men New Arrivals</div>
+        <div class="arrival-sub">Latest STYLINX pieces</div>
+      </a>
+      <a class="arrival-card" href="nouveauté_femme.html">
+        <div class="arrival-img arrival-bg-women">
+          <img src="wnew.jpg" alt="Women Collection">
+          <div class="arrival-badge">New</div>
+          <button class="arrival-hover-btn">Discover →</button>
+        </div>
+        <div class="arrival-name">Women New Arrivals</div>
+        <div class="arrival-sub">Must-have styles</div>
+      </a>
+      <a class="arrival-card" href="nouveauté_enfant.html">
+        <div class="arrival-img arrival-bg-kids">
+         <img src="knew.jpg" alt="Kid Collection">
+          <div class="arrival-badge">New</div>
+          <button class="arrival-hover-btn">Discover →</button>
+        </div>
+        <div class="arrival-name">Kids New Arrivals</div>
+        <div class="arrival-sub">Fun &amp; comfortable</div>
+      </a>
+      
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section class="products" id="products">
+    <div class="section-header reveal">
+      <div class="section-header-left">
+        <p class="section-label">Our Offer</p>
+        <h2 class="section-title">Clothing · Shoes · Accessories</h2>
+      </div>
+    </div>
+    <div class="product-grid reveal">
+      <a class="product-card" href="vetements.html">
+        <div class="product-img-wrap product-img-clothing">
+          <img src="clothing.jpg" alt="Clothing Collection">
+        </div>
+        <div class="product-info">
+          <div>
+            <h3>Clothing</h3>
+            <p>From ₹2,250</p>
+          </div>
+          <button class="product-btn" onclick="location.href='vetements.html'">→</button>
+        </div>
+      </a>
+      <a class="product-card" href="chaussures.html">
+        <div class="product-img-wrap product-img-shoes">
+          <img src="shoes.jpg" alt="Shoes Collection">
+        </div>
+        <div class="product-info">
+          <div>
+            <h3>Shoes</h3>
+            <p>From ₹3,000</p>
+          </div>
+          <button class="product-btn" onclick="location.href='chaussures.html'">→</button>
+        </div>
+      </a>
+      <a class="product-card" href="accessoires.html">
+        <div class="product-img-wrap product-img-accessories">
+          <img src="accessoires.jpg" alt="Accessoires Collection">
+        </div>
+        <div class="product-info">
+          <div>
+            <h3>Accessories</h3>
+            <p>From ₹1,050</p>
+          </div>
+          <button class="product-btn" onclick="location.href='accessoires.html'">→</button>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about" id="about">
+    <div class="reveal">
+      <p class="about-label">Our Story</p>
+      <h2>Fashion is more than clothing —<br>it's <em>identity.</em></h2>
+      <p>STYLINX is a modern fashion brand built on simplicity, elegance, and trend. We design clothing, shoes, and accessories for men, women, and children who want to express confidence and individuality through style.</p>
+      <p>Our collections combine comfort, quality materials, and contemporary design. Whether it's everyday casual wear or standout pieces, STYLINX focuses on delivering fashion that feels good and looks exceptional.</p>
+    </div>
+    <div class="about-right reveal">
+      <div class="about-stat-card">
+        <div class="about-stat-num">3K+</div>
+        <div class="about-stat-label">Styles Available</div>
+      </div>
+      <div class="about-stat-card">
+        <div class="about-stat-num">98%</div>
+        <div class="about-stat-label">Satisfaction Rate</div>
+      </div>
+      <div class="about-stat-card">
+        <div class="about-stat-num">3</div>
+        <div class="about-stat-label">Categories</div>
+      </div>
+      <div class="about-stat-card">
+        <div class="about-stat-num">30</div>
+        <div class="about-stat-label">Day Returns</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <div class="contact-left reveal">
+      <p class="section-label">Get in Touch</p>
+      <h2 class="section-title">We'd love to<br>hear from you.</h2>
+      <p>Have a question, a collaboration idea, or just want to say hello? Fill out the form and we'll get back to you within 24 hours.</p>
+      <div class="contact-info-item">
+        <div class="contact-info-icon">📱</div>
+        <div class="contact-info-text">
+          <strong>WhatsApp</strong>
+          <span>+91 98864 00949</span>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-info-icon">✉️</div>
+        <div class="contact-info-text">
+          <strong>Email</strong>
+          <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ccafa3a2b8adafb88cbfb8b5a0a5a2b4e2afa3a1">[email&#160;protected]</a></span>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <form class="contact-form" id="contact-form" onsubmit="sendEmail(event)">
+        <div class="form-row">
+          <div class="field">
+            <input type="text" id="fname" name="from_name" placeholder=" " required>
+            <label for="fname">Name</label>
+          </div>
+          <div class="field" style="border-right:1px solid var(--sand);">
+            <input type="email" id="femail" name="from_email" placeholder=" " required>
+            <label for="femail">Email</label>
+          </div>
+        </div>
+        <div class="field field-full" style="border-top:none;">
+          <textarea id="fmsg" name="message" placeholder=" " required></textarea>
+          <label for="fmsg">Your Message</label>
+        </div>
+        <div class="contact-submit">
+          <button type="submit" id="contact-btn">Send Message →</button>
+          <p id="contact-success" style="display:none;color:#1eb558;font-size:0.85rem;margin-top:12px;font-weight:600;">✓ Message sent! We'll get back to you within 24 hours.</p>
+          <p id="contact-error" style="display:none;color:#c0392b;font-size:0.85rem;margin-top:12px;">✕ Something went wrong. Please try again.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <span class="logo">STYLINX</span>
+        <p>Simple. Classy. Trendy. Fashion designed for everyone — men, women, and children who care about style.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigate</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="homme.html">Men</a></li>
+          <li><a href="femme.html">Women</a></li>
+          <li><a href="enfant.html">Kids</a></li>
+          <li><a href="panier.html">Cart</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Information</h4>
+        <ul>
+          <li><a href="#">Fast Delivery</a></li>
+          <li><a href="#">Easy Returns</a></li>
+          <li><a href="#">Secure Payment</a></li>
+          <li><a href="login.html">My Account</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>📱 WhatsApp<br>+91 98864 00949</p>
+        <p>✉️ Email<br><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f1929e9f85909285b18285889d989f89df929e9c">[email&#16contact@stylinx.com</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 STYLINX – All rights reserved</p>
+      <p>Simple. Classy. Trendy.</p>
+    </div>
+  </footer>
+
+  <script src="Accueil.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="supabase.js"></script>
+  <script>
+    emailjs.init('fov7_ZsxcBQjLfyoV');
+
+    function sendEmail(e) {
+      e.preventDefault();
+      const btn     = document.getElementById('contact-btn');
+      const success = document.getElementById('contact-success');
+      const error   = document.getElementById('contact-error');
+      success.style.display = 'none';
+      error.style.display   = 'none';
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+
+      emailjs.sendForm('service_tpqtq5m', 'template_welb9x8', '#contact-form')
+        .then(() => {
+          success.style.display = 'block';
+          btn.textContent = 'Message Sent ✓';
+          document.getElementById('contact-form').reset();
+          setTimeout(() => { btn.textContent = 'Send Message →'; btn.disabled = false; }, 4000);
+        })
+        .catch(() => {
+          error.style.display = 'block';
+          btn.textContent = 'Send Message →';
+          btn.disabled = false;
+        });
+    }
+  </script>
+</body>
+</html>

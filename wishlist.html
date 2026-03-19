@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wishlist – STYLINX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="produits.css">
+  <style>
+    .wl-page { padding: 60px 7%; }
+    .wl-eyebrow { font-size:0.68rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:8px; }
+    .wl-title { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); font-weight:900; margin-bottom:40px; color:var(--ink); }
+    .wl-empty { text-align:center; padding:80px 24px; color:var(--mid); border:1px solid var(--sand); }
+    .wl-empty .empty-icon { font-size:3rem; margin-bottom:16px; }
+    .wl-empty p { margin-bottom:8px; }
+    .wl-empty a { color:var(--accent); font-weight:600; }
+    .wl-count { font-size:0.8rem; color:var(--mid); letter-spacing:0.06em; }
+    .wl-count strong { color:var(--ink); }
+    .btn-clear-wl { background:transparent; border:1.5px solid var(--sand); color:var(--mid); font-family:'DM Sans',sans-serif; font-size:0.75rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; padding:8px 18px; border-radius:2px; cursor:pointer; transition:all 0.18s; }
+    .btn-clear-wl:hover { border-color:#c0392b; color:#c0392b; }
+    .wl-remove-btn {
+      position:absolute; top:12px; right:12px; width:34px; height:34px;
+      background:rgba(255,255,255,0.92); border:1px solid var(--sand); border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; font-size:1rem; color:#e85d04; transition:all 0.2s;
+      z-index:3; backdrop-filter:blur(4px);
+    }
+    .wl-remove-btn:hover { background:#fff0ee; border-color:#c0392b; color:#c0392b; transform:scale(1.1); }
+  </style>
+</head>
+<body>
+  <div class="marquee-bar"><div class="marquee-inner">
+    <span>New Collection 2025</span><span>Free Delivery Over &#8377;3,000</span>
+    <span>Easy Returns &#8212; 30 Days</span><span>Men &middot; Women &middot; Kids</span>
+    <span>New Collection 2025</span><span>Free Delivery Over &#8377;3,000</span>
+    <span>Easy Returns &#8212; 30 Days</span><span>Men &middot; Women &middot; Kids</span>
+  </div></div>
+
+  <header class="header">
+    <a href="index.html" class="logo">STYLI<span>N</span>X</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="homme.html">Men</a>
+      <a href="femme.html">Women</a>
+      <a href="enfant.html">Kids</a>
+    </nav>
+    <div class="header-actions">
+      <a href="wishlist.html" aria-label="Wishlist" style="position:relative;">&#9825;
+        <span id="wl-badge" style="position:absolute;top:-8px;right:-10px;background:var(--accent);color:#fff;border-radius:50%;width:18px;height:18px;font-size:0.65rem;font-weight:700;display:none;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;line-height:1;"></span>
+      </a>
+      <a href="panier.html" aria-label="Cart" style="position:relative;">&#128722;
+        <span id="cart-badge" style="position:absolute;top:-8px;right:-10px;background:var(--accent);color:#fff;border-radius:50%;width:18px;height:18px;font-size:0.65rem;font-weight:700;display:none;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;line-height:1;"></span>
+      </a>
+      <a href="login.html" aria-label="Account">&#128100;</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="wl-page">
+      <p class="wl-eyebrow">Saved Items</p>
+      <h1 class="wl-title">My Wishlist</h1>
+      <div id="wl-container"></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-main">
+      <div class="footer-brand"><a href="index.html" class="logo">STYLINX</a><p>Simple. Classy. Trendy.</p></div>
+      <div class="footer-col"><h4>Navigate</h4><ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="homme.html">Men</a></li>
+        <li><a href="femme.html">Women</a></li>
+        <li><a href="enfant.html">Kids</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Information</h4><ul>
+        <li>Fast Delivery</li><li>Easy Returns</li><li>Secure Payment</li>
+        <li><a href="login.html">My Account</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Contact</h4>
+        <p>&#128241; <a href="https://wa.me/919886400949">+91 98864 00949</a></p>
+        <p>&#9993; contact@stylinx.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&#169; 2025 STYLINX &#8211; All rights reserved</p><p>Simple. Classy. Trendy.</p>
+    </div>
+  </footer>
+
+  <script>
+    var wishlist = [];
+    try { wishlist = JSON.parse(localStorage.getItem('wishlist')) || []; } catch(e) { wishlist = []; }
+
+    function updateBadges() {
+      var cartBadge = document.getElementById('cart-badge');
+      var wlBadge = document.getElementById('wl-badge');
+      try {
+        var cart = JSON.parse(localStorage.getItem('cart')) || [];
+        var cartTotal = cart.reduce(function(s,i){ return s + (i.qty||1); }, 0);
+        if (cartBadge) { cartBadge.textContent = cartTotal; cartBadge.style.display = cartTotal > 0 ? 'flex' : 'none'; }
+      } catch(e) {}
+      if (wlBadge) { wlBadge.textContent = wishlist.length; wlBadge.style.display = wishlist.length > 0 ? 'flex' : 'none'; }
+    }
+
+    function saveWishlist() {
+      localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      updateBadges();
+    }
+
+    function addToCart(product) {
+      try {
+        var cart = JSON.parse(localStorage.getItem('cart')) || [];
+        var ex = cart.find(function(i){ return i.name === product.name; });
+        if (ex) ex.qty = (ex.qty || 1) + 1;
+        else cart.push({ name: product.name, price: product.price, qty: 1 });
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateBadges();
+        showToast('Added to cart: ' + product.name);
+      } catch(e) {}
+    }
+
+    function buyNow(product) {
+      localStorage.setItem('cart', JSON.stringify([{ name: product.name, price: product.price, qty: 1 }]));
+      window.location.href = 'paiement.html';
+    }
+
+    function removeFromWishlist(idx) {
+      var name = (wishlist[idx] || {}).name || 'item';
+      wishlist.splice(idx, 1);
+      saveWishlist();
+      render();
+      showToast(name + ' removed from wishlist', '#6b6560');
+    }
+
+    function clearWishlist() {
+      if (!wishlist.length) return;
+      if (confirm('Clear your entire wishlist?')) {
+        wishlist = [];
+        saveWishlist();
+        render();
+      }
+    }
+
+    function render() {
+      var container = document.getElementById('wl-container');
+      if (!container) return;
+
+      if (wishlist.length === 0) {
+        container.innerHTML = '<div class="wl-empty">'
+          + '<div class="empty-icon">&#9825;</div>'
+          + '<p style="font-weight:600;color:var(--ink);margin-bottom:8px;">Your wishlist is empty</p>'
+          + '<p>Save your favourite pieces to find them easily later.</p><br>'
+          + '<a href="index.html">Discover our collections &#8594;</a>'
+          + '</div>';
+        return;
+      }
+
+      var cards = '';
+      for (var idx = 0; idx < wishlist.length; idx++) {
+        var item  = wishlist[idx];
+        var name  = item.name  || 'Product';
+        var price = Number(item.price) || 0;
+        var img   = item.img   || '';
+
+        var imgHtml = img
+          ? '<img src="' + img + '" alt="product" style="width:100%;height:100%;object-fit:cover;display:block;">'
+          : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:4rem;opacity:0.2;">&#128717;</div>';
+
+        cards += '<div class="product-card" style="display:flex;flex-direction:column;">'
+          + '<div class="product-image" style="background:var(--sand);height:260px;position:relative;">'
+          +   imgHtml
+          +   '<button class="wl-remove-btn" onclick="removeFromWishlist(' + idx + ')" title="Remove">&#9829;</button>'
+          + '</div>'
+          + '<div class="product-info">'
+          +   '<h3>' + name + '</h3>'
+          +   '<p>&#8377;' + price.toLocaleString('en-IN') + '</p>'
+          +   '<div style="display:flex;gap:8px;margin-top:10px;">'
+          +     '<button onclick="addToCart({name:wishlist[' + idx + '].name,price:wishlist[' + idx + '].price})" '
+          +       'style="flex:1;padding:10px 8px;border:none;font-family:\'DM Sans\',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border-radius:2px;cursor:pointer;background:var(--ink);color:#fff;transition:background 0.18s;"'
+          +       ' onmouseover="this.style.background=\'var(--accent)\'" onmouseout="this.style.background=\'var(--ink)\'">'
+          +       'Add to Cart'
+          +     '</button>'
+          +     '<button onclick="buyNow({name:wishlist[' + idx + '].name,price:wishlist[' + idx + '].price})" '
+          +       'style="flex:1;padding:10px 8px;border:1.5px solid var(--ink);font-family:\'DM Sans\',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border-radius:2px;cursor:pointer;background:transparent;color:var(--ink);transition:all 0.18s;"'
+          +       ' onmouseover="this.style.background=\'var(--ink)\';this.style.color=\'#fff\'" onmouseout="this.style.background=\'transparent\';this.style.color=\'var(--ink)\'">'
+          +       'Buy Now'
+          +     '</button>'
+          +   '</div>'
+          + '</div>'
+          + '</div>';
+      }
+
+      container.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">'
+        + '<p class="wl-count"><strong>' + wishlist.length + '</strong> saved item' + (wishlist.length > 1 ? 's' : '') + '</p>'
+        + '<button class="btn-clear-wl" onclick="clearWishlist()">&#128465; Clear All</button>'
+        + '</div>'
+        + '<div class="grid">' + cards + '</div>';
+    }
+
+    function showToast(msg, bg) {
+      bg = bg || '#0e0d0b';
+      var t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText = 'position:fixed;bottom:28px;right:28px;background:' + bg + ';color:#fff;padding:14px 22px;border-radius:2px;font-size:0.82rem;letter-spacing:0.08em;z-index:9999;opacity:0;transition:opacity 0.25s;font-family:DM Sans,sans-serif;max-width:300px;';
+      document.body.appendChild(t);
+      setTimeout(function(){ t.style.opacity = '1'; }, 10);
+      setTimeout(function(){ t.style.opacity = '0'; setTimeout(function(){ t.remove(); }, 300); }, 2400);
+    }
+
+    render();
+    updateBadges();
+  </script>
+  <script src="supabase.js"></script>
+</body>
+</html>

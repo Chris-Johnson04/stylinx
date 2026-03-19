@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cart – STYLINX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="produits.css">
+  <style>
+    .cart-page { padding: 60px 7%; max-width: 980px; }
+    .cart-eyebrow { font-size:0.68rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:8px; }
+    .cart-title { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); font-weight:900; margin-bottom:40px; color:var(--ink); }
+
+    /* Shipping banner */
+    .shipping-banner {
+      padding: 14px 20px; background: var(--cream); border: 1px solid var(--sand);
+      margin-bottom: 28px; border-radius: 2px;
+    }
+    .shipping-banner-top {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px;
+    }
+    .shipping-msg { font-size: 0.82rem; color: var(--ink); }
+    .shipping-msg strong { color: var(--accent); }
+    .shipping-amount { font-size: 0.78rem; font-weight: 700; color: var(--mid); }
+    .shipping-amount.free { color: #1eb558; }
+    .shipping-bar-track {
+      height: 4px; background: var(--sand); border-radius: 4px; overflow: hidden;
+    }
+    .shipping-bar-fill {
+      height: 100%; background: var(--accent); border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+    .shipping-bar-fill.complete { background: #1eb558; }
+
+    /* Table */
+    .cart-table { width:100%; border-collapse:collapse; margin-bottom:0; }
+    .cart-table thead th {
+      font-family:'DM Sans',sans-serif; font-size:0.68rem; font-weight:700;
+      letter-spacing:0.18em; text-transform:uppercase; color:var(--mid);
+      padding:0 12px 14px; border-bottom:2px solid var(--sand); text-align:left;
+    }
+    .cart-table thead th.th-right { text-align:right; }
+    .cart-table tbody tr { border-bottom:1px solid var(--sand); transition:background 0.15s; }
+    .cart-table tbody tr:hover { background:var(--cream); }
+    .cart-table td { padding:18px 12px; vertical-align:middle; }
+    .td-name { font-weight:600; font-size:0.93rem; color:var(--ink); }
+    .td-name small { display:block; font-size:0.72rem; font-weight:400; color:var(--mid); margin-top:2px; }
+    .td-price { font-size:0.88rem; color:var(--mid); white-space:nowrap; }
+    .td-sub { font-weight:700; font-size:0.93rem; color:var(--ink); text-align:right; white-space:nowrap; }
+    .td-del { text-align:right; width:36px; }
+    .btn-del { background:transparent; border:none; color:var(--taupe); cursor:pointer; font-size:1.1rem; padding:4px; border-radius:2px; transition:color 0.15s, background 0.15s; }
+    .btn-del:hover { color:#c0392b; background:#fff0ee; }
+
+    /* Qty control */
+    .cart-qty { display:inline-flex; align-items:center; border:1.5px solid var(--sand); border-radius:2px; overflow:hidden; }
+    .cart-qty button { width:30px; height:30px; background:var(--cream); border:none; font-size:1rem; font-weight:600; color:var(--ink); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.15s; }
+    .cart-qty button:hover { background:var(--sand); }
+    .cart-qty input { width:38px; height:30px; border:none; border-left:1.5px solid var(--sand); border-right:1.5px solid var(--sand); text-align:center; font-family:'DM Sans',sans-serif; font-size:0.88rem; font-weight:600; color:var(--ink); background:transparent; outline:none; }
+    .cart-qty input::-webkit-outer-spin-button, .cart-qty input::-webkit-inner-spin-button { -webkit-appearance:none; }
+
+    /* Summary */
+    .cart-summary { border: 1px solid var(--sand); border-top:none; margin-bottom:28px; }
+    .summary-row {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:14px 24px; border-bottom:1px solid var(--sand);
+      font-size:0.88rem; color:var(--mid);
+    }
+    .summary-row:last-child { border-bottom:none; }
+    .summary-row.total-row {
+      padding:18px 24px; background:var(--cream);
+      font-family:'DM Sans',sans-serif; font-weight:700;
+    }
+    .summary-row .label { letter-spacing:0.04em; }
+    .summary-row .value { font-weight:600; color:var(--ink); }
+    .summary-row .value.free-ship { color:#1eb558; }
+    .summary-row.total-row .value { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900; color:var(--ink); }
+    .summary-row .item-count { font-size:0.72rem; color:var(--mid); }
+
+    /* Empty */
+    .cart-empty { text-align:center; padding:64px 24px; color:var(--mid); font-size:0.95rem; border:1px solid var(--sand); }
+    .cart-empty a { color:var(--accent); font-weight:600; }
+
+    /* Actions */
+    .cart-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:520px; }
+    .cart-actions button, .cart-actions a {
+      padding:15px 20px; border:none; font-family:'DM Sans',sans-serif;
+      font-size:0.78rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase;
+      cursor:pointer; border-radius:2px; transition:all 0.18s;
+      text-decoration:none; display:flex; align-items:center; justify-content:center;
+    }
+    .cart-actions button:hover, .cart-actions a:hover { transform:translateY(-2px); }
+    .btn-pay { background:var(--ink); color:#fff; }
+    .btn-pay:hover { background:var(--accent) !important; }
+    .btn-wa { background:#25d366; color:#fff; }
+    .btn-wa:hover { background:#1eb558 !important; }
+    .btn-clear { background:transparent; color:var(--mid); border:1.5px solid var(--sand); }
+    .btn-clear:hover { border-color:#c0392b !important; color:#c0392b !important; }
+    .btn-continue { background:transparent; color:var(--mid); border:1.5px solid var(--sand); }
+    .btn-continue:hover { border-color:var(--ink) !important; color:var(--ink) !important; }
+  </style>
+</head>
+<body>
+  <div class="marquee-bar"><div class="marquee-inner">
+    <span>New Collection 2025</span><span>Free Delivery Over ₹3,000</span>
+    <span>Easy Returns — 30 Days</span><span>Men · Women · Kids</span>
+    <span>New Collection 2025</span><span>Free Delivery Over ₹3,000</span>
+    <span>Easy Returns — 30 Days</span><span>Men · Women · Kids</span>
+  </div></div>
+
+  <header class="header">
+    <a href="index.html" class="logo">STYLI<span>N</span>X</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="homme.html">Men</a>
+      <a href="femme.html">Women</a>
+      <a href="enfant.html">Kids</a>
+    </nav>
+    <div class="header-actions">
+      <a href="wishlist.html" aria-label="Wishlist" style="position:relative;">♡
+        <span id="wl-badge" style="position:absolute;top:-8px;right:-10px;background:var(--accent);color:#fff;border-radius:50%;width:18px;height:18px;font-size:0.65rem;font-weight:700;display:none;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;line-height:1;"></span>
+      </a>
+      <a href="panier.html" aria-label="Cart" style="position:relative;">🛒
+        <span id="cart-badge" style="position:absolute;top:-8px;right:-10px;background:var(--accent);color:#fff;border-radius:50%;width:18px;height:18px;font-size:0.65rem;font-weight:700;display:none;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;line-height:1;"></span>
+      </a>
+      <a href="login.html" aria-label="Account">👤</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="cart-page">
+      <p class="cart-eyebrow">Your Selection</p>
+      <h1 class="cart-title">Your Cart</h1>
+      <div id="shipping-banner"></div>
+      <div id="cart-container"></div>
+      <div class="cart-actions" id="cart-actions" style="display:none;">
+        <button class="btn-pay" onclick="payAll()">Pay Now →</button>
+        <button class="btn-wa" onclick="orderWhatsApp()">📱 WhatsApp Order</button>
+        <button class="btn-clear" onclick="clearCart()">🗑 Clear All</button>
+        <a href="index.html" class="btn-continue">← Continue Shopping</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-main">
+      <div class="footer-brand"><a href="index.html" class="logo">STYLINX</a><p>Simple. Classy. Trendy.</p></div>
+      <div class="footer-col"><h4>Navigate</h4><ul>
+        <li><a href="index.html">Home</a></li><li><a href="homme.html">Men</a></li>
+        <li><a href="femme.html">Women</a></li><li><a href="enfant.html">Kids</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Information</h4><ul>
+        <li>Fast Delivery</li><li>Easy Returns</li><li>Secure Payment</li>
+        <li><a href="login.html">My Account</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Contact</h4>
+        <p>📱 <a href="https://wa.me/919886400949">+91 98864 00949</a></p>
+        <p>✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4d2e2223392c2e390d3e393421242335632e2220">[email&#160;protected]</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 STYLINX – All rights reserved</p><p>Simple. Classy. Trendy.</p>
+    </div>
+  </footer>
+
+  <script src="supabase.js"></script>
+  <script>
+    const FREE_SHIPPING_THRESHOLD = 3000;
+    const SHIPPING_COST = 150;
+    let cart = [];
+    let activeDiscount = 0;
+    let activePromoCode = '';
+
+    // ── Load cart (Supabase or localStorage) ──────────────────
+    async function loadCart() {
+      // Load immediately from localStorage so page doesn't stay blank
+      function fromLocalStorage() {
+        try {
+          const raw = JSON.parse(localStorage.getItem('cart')) || [];
+          return raw.map(i => ({
+            id:    null,
+            name:  i.name  || '',
+            price: Number(i.price) || 0,
+            img:   i.img   || '',
+            size:  i.size  || '',
+            qty:   Number(i.qty) || 1
+          })).filter(i => i.name);
+        } catch(e) { return []; }
+      }
+
+      cart = fromLocalStorage();
+      render();
+
+      // Then sync with Supabase for logged-in users
+      if (window.SB) {
+        SB.ready(async () => {
+          const user = await SB.getUser();
+          if (user) {
+            const sbCart = await SB.getCart();
+            if (sbCart && sbCart.length > 0) {
+              cart = sbCart;
+              render();
+            }
+          }
+          SB.updateCartBadge();
+          SB.updateWishlistBadge();
+        });
+      }
+    }
+
+    function subtotal() { return cart.reduce((s, i) => s + i.price * (i.qty || 1), 0); }
+    function shipping(sub) { return sub >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST; }
+
+    // ── Shipping banner ────────────────────────────────────────
+    function renderShippingBanner(sub) {
+      const banner = document.getElementById('shipping-banner');
+      if (!banner || !cart.length) { if(banner) banner.innerHTML = ''; return; }
+      const remaining = FREE_SHIPPING_THRESHOLD - sub;
+      const pct = Math.min(100, (sub / FREE_SHIPPING_THRESHOLD) * 100);
+      const isFree = sub >= FREE_SHIPPING_THRESHOLD;
+      banner.innerHTML = `
+        <div class="shipping-banner">
+          <div class="shipping-banner-top">
+            <span class="shipping-msg">
+              ${isFree
+                ? '🎉 <strong>Free shipping unlocked!</strong> You qualify for free delivery.'
+                : `Add <strong>₹${remaining.toLocaleString('en-IN')}</strong> more for free shipping`}
+            </span>
+            <span class="shipping-amount ${isFree ? 'free' : ''}">
+              ${isFree ? '✓ FREE' : '₹' + SHIPPING_COST + ' shipping'}
+            </span>
+          </div>
+          <div class="shipping-bar-track">
+            <div class="shipping-bar-fill ${isFree ? 'complete' : ''}" style="width:${pct}%"></div>
+          </div>
+        </div>`;
+    }
+
+    // ── Render ─────────────────────────────────────────────────
+    function render() {
+      const container = document.getElementById('cart-container');
+      const actionsEl = document.getElementById('cart-actions');
+      if (cart.length === 0) {
+        renderShippingBanner(0);
+        container.innerHTML = `
+          <div class="cart-empty">
+            <p style="font-size:2.5rem;margin-bottom:16px;">🛍</p>
+            <p style="font-weight:600;color:var(--ink);margin-bottom:8px;">Your cart is empty</p>
+            <p>Browse our collections and find something you love.</p><br>
+            <a href="index.html">Start shopping →</a>
+          </div>`;
+        if (actionsEl) actionsEl.style.display = 'none';
+        return;
+      }
+
+      if (actionsEl) actionsEl.style.display = 'grid';
+      const sub   = subtotal();
+      const ship  = shipping(sub);
+      const grand = sub + ship - activeDiscount;
+      const itemCount = cart.reduce((s, i) => s + (i.qty || 1), 0);
+
+      renderShippingBanner(sub);
+
+      const rows = cart.map((item, idx) => `
+        <tr>
+          <td class="td-name">${item.name}${item.size ? '<br><small>Size: ' + item.size + '</small>' : ''}<small>Unit price: ₹${item.price.toLocaleString('en-IN')}</small></td>
+          <td class="td-price">₹${item.price.toLocaleString('en-IN')}</td>
+          <td>
+            <div class="cart-qty">
+              <button onclick="changeQty(${idx},-1)">−</button>
+              <input type="number" min="1" value="${item.qty || 1}" onchange="setQty(${idx},this.value)">
+              <button onclick="changeQty(${idx},+1)">+</button>
+            </div>
+          </td>
+          <td class="td-sub">₹${(item.price * (item.qty||1)).toLocaleString('en-IN')}</td>
+          <td class="td-del"><button class="btn-del" onclick="removeItem(${idx})" title="Remove">✕</button></td>
+        </tr>`).join('');
+
+      // Promo code row
+      const promoHtml = `
+        <div style="padding:14px 20px;border-top:1px solid var(--sand);background:var(--cream);">
+          <p style="font-size:0.68rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--mid);margin-bottom:10px;">Available Offers</p>
+          <div id="available-promos" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+            <span style="font-size:0.78rem;color:var(--mid);">Loading offers…</span>
+          </div>
+        </div>
+        <div class="promo-wrap" style="padding:18px 20px;border-top:1px solid var(--sand);display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <input id="promo-input" type="text" placeholder="Enter promo code" value="${activePromoCode}"
+            style="flex:1;min-width:140px;padding:10px 14px;border:1.5px solid var(--sand);font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;border-radius:2px;background:#fff;"
+            onkeydown="if(event.key==='Enter') applyPromo()">
+          <button onclick="applyPromo()"
+            style="padding:10px 20px;background:var(--ink);color:#fff;border:none;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border-radius:2px;cursor:pointer;">
+            Apply
+          </button>
+          <span id="promo-msg" style="width:100%;font-size:0.78rem;margin-top:2px;"></span>
+        </div>`;
+
+      container.innerHTML = `
+        <table class="cart-table">
+          <thead><tr>
+            <th>Product</th><th>Unit Price</th><th>Quantity</th>
+            <th class="th-right">Subtotal</th><th></th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+        ${promoHtml}
+        <div class="cart-summary">
+          <div class="summary-row">
+            <span class="label">Subtotal <span class="item-count">(${itemCount} item${itemCount>1?'s':''})</span></span>
+            <span class="value">₹${sub.toLocaleString('en-IN')}</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Shipping</span>
+            <span class="value ${ship===0?'free-ship':''}">${ship===0 ? '✓ Free' : '₹'+ship.toLocaleString('en-IN')}</span>
+          </div>
+          ${activeDiscount > 0 ? `
+          <div class="summary-row" style="color:#1eb558;">
+            <span class="label">Promo (${activePromoCode})</span>
+            <span class="value">− ₹${activeDiscount.toLocaleString('en-IN')}</span>
+          </div>` : ''}
+          <div class="summary-row total-row">
+            <span class="label" style="font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;">Order Total</span>
+            <span class="value">₹${grand.toLocaleString('en-IN')}</span>
+          </div>
+        </div>`;
+
+      // Re-apply promo msg if active
+      if (activePromoCode) {
+        const msg = document.getElementById('promo-msg');
+        if (msg) { msg.style.color = '#1eb558'; msg.textContent = '✓ Promo code applied!'; }
+      }
+
+      // Load available promos
+      loadAvailablePromos(sub);
+    }
+
+    // ── Available promo codes display ──────────────────────────
+    async function loadAvailablePromos(currentSubtotal) {
+      const el = document.getElementById('available-promos');
+      if (!el) return;
+      SB.ready(async () => {
+        const { data } = await SB.client()
+          .from('promo_codes')
+          .select('*')
+          .eq('active', true)
+          .order('discount_percent', { ascending: false });
+
+        if (!data || !data.length) { el.innerHTML = '<span style="font-size:0.78rem;color:var(--mid);">No offers available.</span>'; return; }
+
+        el.innerHTML = data.map(p => {
+          const discount = p.discount_percent ? p.discount_percent + '% off' : '₹' + (p.discount_fixed||0).toLocaleString('en-IN') + ' off';
+          const minText  = p.min_order > 0 ? ' on orders above ₹' + p.min_order.toLocaleString('en-IN') : '';
+          const eligible = currentSubtotal >= (p.min_order || 0);
+          return '<div onclick="applyPromoCode(\'' + p.code + '\')" style="cursor:pointer;padding:8px 14px;border:1.5px dashed ' + (eligible ? 'var(--accent)' : 'var(--sand)') + ';border-radius:2px;background:#fff;transition:all 0.18s;" onmouseover="this.style.borderStyle=\'solid\'" onmouseout="this.style.borderStyle=\'dashed\'">'
+            + '<div style="display:flex;align-items:center;gap:8px;">'
+            + '<span style="font-family:\'DM Sans\',monospace;font-weight:700;font-size:0.82rem;color:var(--ink);letter-spacing:0.08em;">' + p.code + '</span>'
+            + '<span style="font-size:0.7rem;background:' + (eligible?'#fff4ee':'var(--cream)') + ';color:' + (eligible?'var(--accent)':'var(--mid)') + ';padding:2px 8px;border-radius:2px;font-weight:600;">' + discount + '</span>'
+            + '</div>'
+            + '<div style="font-size:0.72rem;color:var(--mid);margin-top:3px;">' + (eligible ? '✓ Eligible' + minText : 'Min. order ₹' + (p.min_order||0).toLocaleString('en-IN')) + ' — click to apply</div>'
+            + '</div>';
+        }).join('');
+      });
+    }
+
+    function applyPromoCode(code) {
+      const input = document.getElementById('promo-input');
+      if (input) { input.value = code; applyPromo(); }
+    }
+
+    // ── Promo code ─────────────────────────────────────────────
+    async function applyPromo() {
+      const input = document.getElementById('promo-input');
+      const msg   = document.getElementById('promo-msg');
+      if (!input || !input.value.trim()) return;
+      const sub = subtotal();
+      msg.style.color = var_mid;
+      msg.textContent = 'Checking…';
+      SB.ready(async () => {
+        const result = await SB.validatePromo(input.value.trim(), sub);
+        if (result.valid) {
+          activeDiscount  = result.discount;
+          activePromoCode = input.value.trim().toUpperCase();
+          msg.style.color = '#1eb558';
+          msg.textContent = '✓ ' + result.message;
+        } else {
+          activeDiscount  = 0;
+          activePromoCode = '';
+          msg.style.color = '#c0392b';
+          msg.textContent = '✕ ' + result.message;
+        }
+        render();
+      });
+    }
+    const var_mid = '#6b6560';
+
+    // ── Cart actions ───────────────────────────────────────────
+    async function changeQty(idx, delta) {
+      const item = cart[idx];
+      const newQty = Math.max(1, (item.qty || 1) + delta);
+      if (item.id) { await SB.updateCartQty(item.id, newQty); }
+      cart[idx].qty = newQty;
+      render();
+    }
+    async function setQty(idx, val) {
+      const n = parseInt(val);
+      if (!isNaN(n) && n >= 1) {
+        if (cart[idx].id) await SB.updateCartQty(cart[idx].id, n);
+        cart[idx].qty = n;
+        render();
+      }
+    }
+    async function removeItem(idx) {
+      const item = cart[idx];
+      if (item.id) await SB.removeFromCart(item.id);
+      cart.splice(idx, 1);
+      render();
+      showToast('✕  ' + item.name + ' removed', '#6b6560');
+    }
+    async function clearCart() {
+      if (!cart.length) return;
+      if (confirm('Remove all items from your cart?')) {
+        await SB.clearCart();
+        cart = [];
+        render();
+      }
+    }
+    function payAll() {
+      if (!cart.length) { showToast('Your cart is empty.'); return; }
+      // Save discount info for checkout
+      const sub = subtotal(), ship = shipping(sub);
+      localStorage.setItem('checkout_discount', activeDiscount);
+      localStorage.setItem('checkout_promo', activePromoCode);
+      window.location.href = 'paiement.html';
+    }
+    function orderWhatsApp() {
+      if (!cart.length) { showToast('Your cart is empty.'); return; }
+      const sub = subtotal(), ship = shipping(sub), grand = sub + ship - activeDiscount;
+      let msg = 'Hello STYLINX! I would like to order:\n\n';
+      cart.forEach(i => { msg += '• ' + (i.qty||1) + '\u00d7 ' + i.name + (i.size ? ' (Size: '+i.size+')' : '') + ' \u2014 \u20b9' + (i.price*(i.qty||1)).toLocaleString('en-IN') + '\n'; });
+      msg += '\nSubtotal: \u20b9' + sub.toLocaleString('en-IN');
+      if (activeDiscount > 0) msg += '\nPromo (' + activePromoCode + '): \u2212\u20b9' + activeDiscount.toLocaleString('en-IN');
+      msg += '\nShipping: ' + (ship === 0 ? 'Free' : '\u20b9' + ship.toLocaleString('en-IN'));
+      msg += '\nTotal: \u20b9' + grand.toLocaleString('en-IN');
+      window.open('https://wa.me/919886400949?text=' + encodeURIComponent(msg));
+    }
+
+    loadCart();
+  </script>
+</body>
+</html>

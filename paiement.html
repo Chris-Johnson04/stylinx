@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout – STYLINX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#0e0d0b; --cream:#f7f4ef; --warm-white:#faf9f6; --sand:#e8e2d6; --accent:#E85D04; --mid:#6b6560; --taupe:#c4b9a8; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { min-height:100vh; background:var(--cream); font-family:'DM Sans',sans-serif; color:var(--ink); padding:40px 20px; }
+    .wrap { width:100%; max-width:520px; margin:0 auto; }
+
+    .pay-logo { font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; letter-spacing:0.12em; text-align:center; margin-bottom:6px; text-decoration:none; display:block; color:var(--ink); }
+    .pay-logo span { color:var(--accent); }
+    .pay-sub { text-align:center; font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid); margin-bottom:32px; }
+
+    .section-box { background:var(--warm-white); border:1px solid var(--sand); margin-bottom:16px; }
+    .section-head { padding:14px 20px; border-bottom:1px solid var(--sand); display:flex; align-items:center; gap:10px; }
+    .section-num { width:24px; height:24px; background:var(--ink); color:#fff; border-radius:50%; font-size:0.7rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .section-title { font-size:0.78rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; }
+    .section-body { padding:20px; }
+
+    /* Order recap */
+    .recap-item { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--sand); font-size:0.88rem; }
+    .recap-item:last-child { border-bottom:none; }
+    .recap-item .rname { color:var(--ink); font-weight:500; }
+    .recap-item .rsize { font-size:0.75rem; color:var(--mid); }
+    .recap-item .rprice { font-weight:700; color:var(--ink); }
+    .recap-total { display:flex; justify-content:space-between; align-items:center; padding:14px 20px; background:var(--cream); border-top:2px solid var(--sand); }
+    .recap-total .label { font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--mid); font-weight:600; }
+    .recap-total .value { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; color:var(--ink); }
+    .recap-row-sm { display:flex; justify-content:space-between; padding:6px 20px; font-size:0.82rem; color:var(--mid); }
+    .recap-row-sm.free { color:#1eb558; }
+    .recap-row-sm.discount { color:#1eb558; }
+
+    /* Customer info fields */
+    .field { position:relative; border:1px solid var(--sand); border-bottom:none; background:var(--warm-white); }
+    .field:last-of-type { border-bottom:1px solid var(--sand); }
+    .field:focus-within { background:#fff; border-color:var(--ink); z-index:1; }
+    .field input, .field textarea {
+      width:100%; padding:22px 16px 10px; background:transparent;
+      border:none; font-family:'DM Sans',sans-serif; font-size:0.92rem; color:var(--ink); outline:none; resize:none;
+    }
+    .field textarea { min-height:80px; padding-top:24px; }
+    .field label {
+      position:absolute; top:18px; left:16px; font-size:0.72rem;
+      letter-spacing:0.12em; text-transform:uppercase; color:var(--taupe);
+      pointer-events:none; transition:all 0.15s ease;
+    }
+    .field:focus-within label,
+    .field input:not(:placeholder-shown) ~ label,
+    .field textarea:not(:placeholder-shown) ~ label { top:7px; font-size:0.6rem; color:var(--accent); }
+
+    /* Payment buttons */
+    .pay-methods { display:flex; flex-direction:column; gap:10px; }
+    .pay-btn {
+      padding:16px 20px; border:none; font-family:'DM Sans',sans-serif;
+      font-size:0.82rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;
+      cursor:pointer; border-radius:2px; transition:all 0.18s;
+      display:flex; align-items:center; justify-content:center; gap:12px;
+    }
+    .pay-btn:hover { transform:translateY(-2px); }
+    .pay-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+    .btn-wa { background:#25d366; color:#fff; }
+    .btn-wa:hover { background:#1eb558; }
+    .btn-sim { background:var(--ink); color:#fff; }
+    .btn-sim:hover { background:var(--accent); }
+
+    .pay-note { margin-top:14px; font-size:0.72rem; color:var(--mid); text-align:center; letter-spacing:0.06em; }
+    .back-link { display:block; text-align:center; margin-top:18px; font-size:0.78rem; color:var(--mid); text-decoration:none; transition:color 0.18s; }
+    .back-link:hover { color:var(--accent); }
+    .error-msg { color:#c0392b; font-size:0.78rem; margin-top:8px; display:none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="index.html" class="pay-logo">STYLI<span>N</span>X</a>
+    <p class="pay-sub">Secure Checkout</p>
+
+    <!-- Step 1: Order recap -->
+    <div class="section-box">
+      <div class="section-head">
+        <div class="section-num">1</div>
+        <span class="section-title">Order Summary</span>
+      </div>
+      <div class="section-body" id="recap-body">
+        <p style="color:var(--mid);font-size:0.88rem;">Loading cart…</p>
+      </div>
+      <div id="recap-totals"></div>
+    </div>
+
+    <!-- Step 2: Customer info -->
+    <div class="section-box">
+      <div class="section-head">
+        <div class="section-num">2</div>
+        <span class="section-title">Your Details</span>
+      </div>
+      <div class="section-body" style="padding:0;">
+        <div class="field">
+          <input type="text" id="c-name" placeholder=" " autocomplete="name">
+          <label for="c-name">Full Name</label>
+        </div>
+        <div class="field">
+          <input type="tel" id="c-phone" placeholder=" " autocomplete="tel">
+          <label for="c-phone">Phone / WhatsApp Number</label>
+        </div>
+        <div class="field">
+          <input type="email" id="c-email" placeholder=" " autocomplete="email">
+          <label for="c-email">Email (optional)</label>
+        </div>
+        <div class="field" style="border-bottom:1px solid var(--sand);">
+          <textarea id="c-address" placeholder=" "></textarea>
+          <label for="c-address">Delivery Address</label>
+        </div>
+      </div>
+      <p class="error-msg" id="form-error" style="padding:0 20px 14px;"></p>
+    </div>
+
+    <!-- Step 3: Payment -->
+    <div class="section-box">
+      <div class="section-head">
+        <div class="section-num">3</div>
+        <span class="section-title">Payment Method</span>
+      </div>
+      <div class="section-body">
+        <div class="pay-methods">
+          <button class="pay-btn btn-wa" id="btn-wa" onclick="placeOrder('whatsapp')">
+            📱 Order &amp; Pay via WhatsApp
+          </button>
+          <button class="pay-btn btn-sim" id="btn-sim" onclick="placeOrder('simulated')">
+            🔒 Simulate Online Payment
+          </button>
+        </div>
+        <p class="pay-note">Your order will be saved and confirmed via WhatsApp</p>
+      </div>
+    </div>
+
+    <a href="panier.html" class="back-link">← Back to Cart</a>
+  </div>
+
+  <script src="supabase.js"></script>
+  <script>
+    const FREE_SHIP = 3000, SHIP_COST = 150;
+    let cart = [], subtotal = 0, shipCost = 0, discount = 0, promoCode = '', grandTotal = 0;
+
+    async function initPage() {
+      // Load cart — try Supabase first, fallback to localStorage
+      function loadFromLocalStorage() {
+        try {
+          const raw = JSON.parse(localStorage.getItem('cart')) || [];
+          return raw.map(i => ({
+            id:    null,
+            name:  i.name  || '',
+            price: Number(i.price) || 0,
+            img:   i.img   || '',
+            size:  i.size  || '',
+            qty:   Number(i.qty) || 1
+          })).filter(i => i.name);
+        } catch(e) { return []; }
+      }
+
+      // Get discount/promo from localStorage (set in panier.html)
+      discount  = parseInt(localStorage.getItem('checkout_discount') || '0');
+      promoCode = localStorage.getItem('checkout_promo') || '';
+
+      // Load immediately from localStorage so page doesn't stay blank
+      cart = loadFromLocalStorage();
+      subtotal  = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      shipCost  = subtotal >= FREE_SHIP ? 0 : SHIP_COST;
+      grandTotal = subtotal + shipCost - discount;
+      renderRecap();
+
+      // Then try Supabase for logged-in users
+      if (window.SB) {
+        SB.ready(async () => {
+          const user = await SB.getUser();
+          if (user) {
+            const sbCart = await SB.getCart();
+            if (sbCart && sbCart.length > 0) {
+              cart = sbCart;
+              subtotal  = cart.reduce((s, i) => s + i.price * i.qty, 0);
+              shipCost  = subtotal >= FREE_SHIP ? 0 : SHIP_COST;
+              grandTotal = subtotal + shipCost - discount;
+              renderRecap();
+            }
+            document.getElementById('c-email').value = user.email || '';
+          }
+        });
+      }
+    }
+
+    function renderRecap() {
+      const body = document.getElementById('recap-body');
+      const totals = document.getElementById('recap-totals');
+
+      if (!cart.length) {
+        body.innerHTML = '<p style="color:var(--mid);font-size:0.88rem;">Your cart is empty. <a href="index.html" style="color:var(--accent);">Go shopping →</a></p>';
+        return;
+      }
+
+      body.innerHTML = cart.map(item =>
+        '<div class="recap-item">'
+        + '<div><span class="rname">' + item.name + '</span>'
+        + (item.size ? '<br><span class="rsize">Size: ' + item.size + '</span>' : '')
+        + '<br><span style="font-size:0.75rem;color:var(--mid);">x' + (item.qty||1) + '</span></div>'
+        + '<span class="rprice">&#8377;' + (item.price * (item.qty||1)).toLocaleString('en-IN') + '</span>'
+        + '</div>'
+      ).join('');
+
+      totals.innerHTML =
+        '<div class="recap-row-sm"><span>Subtotal</span><span>&#8377;' + subtotal.toLocaleString('en-IN') + '</span></div>'
+        + '<div class="recap-row-sm ' + (shipCost===0?'free':'') + '"><span>Shipping</span><span>' + (shipCost===0?'&#10003; Free':'&#8377;'+shipCost.toLocaleString('en-IN')) + '</span></div>'
+        + (discount > 0 ? '<div class="recap-row-sm discount"><span>Promo (' + promoCode + ')</span><span>&#8722;&#8377;' + discount.toLocaleString('en-IN') + '</span></div>' : '')
+        + '<div class="recap-total"><span class="label">Total</span><span class="value">&#8377;' + grandTotal.toLocaleString('en-IN') + '</span></div>';
+    }
+
+    function validateForm() {
+      const name    = document.getElementById('c-name').value.trim();
+      const phone   = document.getElementById('c-phone').value.trim();
+      const address = document.getElementById('c-address').value.trim();
+      const errEl   = document.getElementById('form-error');
+
+      if (!name)    { errEl.textContent = 'Please enter your full name.';     errEl.style.display='block'; return null; }
+      if (!phone)   { errEl.textContent = 'Please enter your phone number.';  errEl.style.display='block'; return null; }
+      if (!address) { errEl.textContent = 'Please enter your delivery address.'; errEl.style.display='block'; return null; }
+
+      errEl.style.display = 'none';
+      return {
+        name,
+        phone,
+        email:   document.getElementById('c-email').value.trim(),
+        address
+      };
+    }
+
+    async function placeOrder(method) {
+      const customerInfo = validateForm();
+      if (!customerInfo) return;
+      if (!cart.length)  { showToast('Your cart is empty.', '#c0392b'); return; }
+
+      // Disable buttons
+      document.getElementById('btn-wa').disabled  = true;
+      document.getElementById('btn-sim').disabled = true;
+      showToast('Saving your order…', '#6b6560');
+
+      // Save order to Supabase
+      const order = await SB.createOrder({
+        cart, subtotal, shipping: shipCost, discount,
+        promoCode, customerInfo, paymentMethod: method
+      });
+
+      if (!order) {
+        document.getElementById('btn-wa').disabled  = false;
+        document.getElementById('btn-sim').disabled = false;
+        showToast('Error saving order. Please try again.', '#c0392b');
+        return;
+      }
+
+      // Save for confirmation page
+      localStorage.setItem('last_order', JSON.stringify({ ...order, items: cart }));
+      localStorage.removeItem('checkout_discount');
+      localStorage.removeItem('checkout_promo');
+
+      if (method === 'whatsapp') {
+        // Build WhatsApp message
+        let msg = 'Hello STYLINX! I just placed order *' + order.order_number + '*\n\n';
+        cart.forEach(i => {
+          msg += '• ' + (i.qty||1) + '\u00d7 ' + i.name;
+          if (i.size) msg += ' (Size: ' + i.size + ')';
+          msg += ' — \u20b9' + (i.price*(i.qty||1)).toLocaleString('en-IN') + '\n';
+        });
+        msg += '\nSubtotal: \u20b9' + subtotal.toLocaleString('en-IN');
+        if (discount > 0) msg += '\nPromo (' + promoCode + '): \u2212\u20b9' + discount.toLocaleString('en-IN');
+        msg += '\nShipping: ' + (shipCost===0?'Free':'\u20b9'+shipCost.toLocaleString('en-IN'));
+        msg += '\n*Total: \u20b9' + grandTotal.toLocaleString('en-IN') + '*';
+        msg += '\n\nDelivery to: ' + customerInfo.address;
+        msg += '\nPhone: ' + customerInfo.phone;
+
+        window.open('https://wa.me/919886400949?text=' + encodeURIComponent(msg), '_blank');
+      }
+
+      // Redirect to confirmation
+      setTimeout(() => { window.location.href = 'confirmation.html'; }, method === 'whatsapp' ? 800 : 400);
+    }
+
+    initPage();
+  </script>
+  <script src="supabase.js"></script>
+</body>
+</html>

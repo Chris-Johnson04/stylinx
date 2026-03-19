@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login – STYLINX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="auth-wrap">
+    <a href="index.html" class="auth-logo">STYLI<span>N</span>X</a>
+    <p class="auth-tagline">Simple. Classy. Trendy.</p>
+    <div class="auth-box">
+      <div class="tabs">
+        <button class="tab active" data-tab="login" onclick="switchTab('login')">Sign In</button>
+        <button class="tab" data-tab="register" onclick="switchTab('register')">Create Account</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="login" class="tab-content active">
+        <div class="field">
+          <input type="email" id="l-email" placeholder=" " autocomplete="email">
+          <label for="l-email">Email Address</label>
+        </div>
+        <div class="field">
+          <input type="password" id="l-pass" placeholder=" " autocomplete="current-password">
+          <label for="l-pass">Password</label>
+        </div>
+        <p id="login-error" style="color:#c0392b;font-size:0.78rem;margin-top:8px;display:none;"></p>
+        <button class="submit-btn" id="login-btn" onclick="handleLogin()">Sign In →</button>
+      </div>
+
+      <!-- REGISTER -->
+      <div id="register" class="tab-content">
+        <div class="field">
+          <input type="text" id="r-name" placeholder=" " autocomplete="name">
+          <label for="r-name">Full Name</label>
+        </div>
+        <div class="field">
+          <input type="email" id="r-email" placeholder=" " autocomplete="email">
+          <label for="r-email">Email Address</label>
+        </div>
+        <div class="field">
+          <input type="password" id="r-pass" placeholder=" " autocomplete="new-password">
+          <label for="r-pass">Password</label>
+        </div>
+        <p id="register-error" style="color:#c0392b;font-size:0.78rem;margin-top:8px;display:none;"></p>
+        <p id="register-success" style="color:#1eb558;font-size:0.78rem;margin-top:8px;display:none;">Account created! Check your email to confirm.</p>
+        <button class="submit-btn" id="register-btn" onclick="handleRegister()">Create Account →</button>
+      </div>
+    </div>
+    <a href="index.html" class="back-home">← Back to STYLINX</a>
+  </div>
+
+  <script src="supabase.js"></script>
+  <script>
+    function switchTab(name) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === name));
+    }
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('tab') === 'register') switchTab('register');
+
+    function setLoading(btnId, loading) {
+      const btn = document.getElementById(btnId);
+      btn.disabled = loading;
+      btn.textContent = loading ? 'Please wait…' : (btnId === 'login-btn' ? 'Sign In →' : 'Create Account →');
+    }
+
+    async function handleLogin() {
+      const email = document.getElementById('l-email').value.trim();
+      const pass  = document.getElementById('l-pass').value;
+      const errEl = document.getElementById('login-error');
+      errEl.style.display = 'none';
+      if (!email || !pass) { errEl.textContent = 'Please fill in all fields.'; errEl.style.display = 'block'; return; }
+      setLoading('login-btn', true);
+      SB.ready(async () => {
+        const { data, error } = await SB.signIn(email, pass);
+        setLoading('login-btn', false);
+        if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; return; }
+        await SB.migrateLocalData();
+        const redirect = new URLSearchParams(window.location.search).get('redirect') || 'index.html';
+        window.location.href = redirect;
+      });
+    }
+
+    async function handleRegister() {
+      const name  = document.getElementById('r-name').value.trim();
+      const email = document.getElementById('r-email').value.trim();
+      const pass  = document.getElementById('r-pass').value;
+      const errEl = document.getElementById('register-error');
+      const okEl  = document.getElementById('register-success');
+      errEl.style.display = 'none'; okEl.style.display = 'none';
+      if (!name || !email || !pass) { errEl.textContent = 'Please fill in all fields.'; errEl.style.display = 'block'; return; }
+      if (pass.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; errEl.style.display = 'block'; return; }
+      setLoading('register-btn', true);
+      SB.ready(async () => {
+        const { data, error } = await SB.signUp(email, pass, name);
+        setLoading('register-btn', false);
+        if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; return; }
+        okEl.style.display = 'block';
+        setTimeout(() => window.location.href = 'index.html', 2000);
+      });
+    }
+
+    // Check if already logged in
+    SB.ready(async () => {
+      const user = await SB.getUser();
+      if (user) window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>

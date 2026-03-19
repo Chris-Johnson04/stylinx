@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin – STYLINX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#0e0d0b; --cream:#f7f4ef; --warm-white:#faf9f6; --sand:#e8e2d6; --accent:#E85D04; --mid:#6b6560; --taupe:#c4b9a8; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'DM Sans',sans-serif; background:#f0ede8; color:var(--ink); min-height:100vh; display:flex; }
+
+    /* Sidebar */
+    .sidebar { width:240px; background:var(--ink); color:#fff; min-height:100vh; display:flex; flex-direction:column; flex-shrink:0; position:sticky; top:0; height:100vh; overflow-y:auto; }
+    .sidebar-logo { padding:28px 24px 20px; font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; letter-spacing:0.12em; border-bottom:1px solid rgba(255,255,255,0.08); }
+    .sidebar-logo span { color:var(--accent); }
+    .sidebar-label { padding:20px 24px 8px; font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.3); }
+    .sidebar-item { display:flex; align-items:center; gap:12px; padding:12px 24px; font-size:0.82rem; font-weight:500; color:rgba(255,255,255,0.6); cursor:pointer; transition:all 0.18s; border-left:3px solid transparent; }
+    .sidebar-item:hover { background:rgba(255,255,255,0.06); color:#fff; }
+    .sidebar-item.active { background:rgba(232,93,4,0.15); color:#fff; border-left-color:var(--accent); }
+    .sidebar-item .icon { font-size:1rem; width:20px; text-align:center; }
+    .sidebar-bottom { margin-top:auto; padding:20px 24px; border-top:1px solid rgba(255,255,255,0.08); }
+    .sidebar-bottom a { font-size:0.78rem; color:rgba(255,255,255,0.4); text-decoration:none; transition:color 0.18s; }
+    .sidebar-bottom a:hover { color:#fff; }
+
+    /* Main */
+    .main { flex:1; padding:40px; overflow-y:auto; }
+    .page-header { margin-bottom:32px; }
+    .page-header h1 { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:900; margin-bottom:4px; }
+    .page-header p { font-size:0.85rem; color:var(--mid); }
+
+    /* Stats */
+    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:36px; }
+    .stat-card { background:#fff; border:1px solid var(--sand); padding:20px 24px; }
+    .stat-card .label { font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--mid); margin-bottom:8px; }
+    .stat-card .value { font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:var(--ink); }
+    .stat-card .sub { font-size:0.75rem; color:var(--mid); margin-top:4px; }
+    .stat-card.accent { border-top:3px solid var(--accent); }
+
+    /* Section */
+    .section { background:#fff; border:1px solid var(--sand); margin-bottom:24px; }
+    .section-head { display:flex; justify-content:space-between; align-items:center; padding:16px 24px; border-bottom:1px solid var(--sand); }
+    .section-head h2 { font-size:0.82rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; }
+    .section-body { padding:0; }
+
+    /* Table */
+    .data-table { width:100%; border-collapse:collapse; font-size:0.83rem; }
+    .data-table th { padding:12px 20px; text-align:left; font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--mid); font-weight:600; border-bottom:1px solid var(--sand); background:var(--cream); }
+    .data-table td { padding:14px 20px; border-bottom:1px solid var(--sand); color:var(--ink); vertical-align:middle; }
+    .data-table tr:last-child td { border-bottom:none; }
+    .data-table tr:hover td { background:var(--cream); }
+
+    /* Badges */
+    .badge { display:inline-flex; align-items:center; padding:3px 10px; border-radius:2px; font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; }
+    .badge-pending   { background:#fff4ee; color:var(--accent); }
+    .badge-confirmed { background:#f0faf4; color:#1eb558; }
+    .badge-shipped   { background:#e8f4ff; color:#2980b9; }
+    .badge-active    { background:#f0faf4; color:#1eb558; }
+    .badge-inactive  { background:#f5f5f5; color:#999; }
+
+    /* Action buttons */
+    .btn-sm { padding:6px 14px; border:none; font-family:'DM Sans',sans-serif; font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; border-radius:2px; transition:all 0.18s; }
+    .btn-primary { background:var(--ink); color:#fff; }
+    .btn-primary:hover { background:var(--accent); }
+    .btn-outline { background:transparent; color:var(--mid); border:1px solid var(--sand); }
+    .btn-outline:hover { border-color:var(--ink); color:var(--ink); }
+    .btn-danger { background:transparent; color:#c0392b; border:1px solid #c0392b; }
+    .btn-danger:hover { background:#c0392b; color:#fff; }
+
+    /* Promo form */
+    .promo-form { padding:20px 24px; display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:12px; align-items:end; border-bottom:1px solid var(--sand); }
+    .form-field { display:flex; flex-direction:column; gap:6px; }
+    .form-field label { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--mid); font-weight:600; }
+    .form-field input, .form-field select { padding:10px 12px; border:1.5px solid var(--sand); background:var(--warm-white); font-family:'DM Sans',sans-serif; font-size:0.85rem; outline:none; border-radius:2px; transition:border-color 0.18s; }
+    .form-field input:focus, .form-field select:focus { border-color:var(--ink); }
+
+    /* Order detail modal */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center; }
+    .modal-overlay.open { display:flex; }
+    .modal { background:#fff; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; }
+    .modal-head { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; border-bottom:1px solid var(--sand); }
+    .modal-head h3 { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; }
+    .modal-close { background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--mid); }
+    .modal-body { padding:24px; }
+    .modal-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--sand); font-size:0.85rem; }
+    .modal-row:last-child { border-bottom:none; }
+    .modal-row .ml { color:var(--mid); }
+
+    /* Status selector */
+    .status-select { padding:5px 10px; border:1.5px solid var(--sand); background:var(--warm-white); font-family:'DM Sans',sans-serif; font-size:0.75rem; border-radius:2px; cursor:pointer; }
+
+    /* Tab panels */
+    .admin-tab-content { display:none; }
+    .admin-tab-content.active { display:block; }
+
+    /* Loading */
+    .loading { text-align:center; padding:40px; color:var(--mid); font-size:0.88rem; }
+
+    @media(max-width:900px) { .stats-grid { grid-template-columns:1fr 1fr; } .sidebar { width:200px; } }
+    @media(max-width:600px) { body { flex-direction:column; } .sidebar { width:100%; min-height:auto; height:auto; position:static; } .stats-grid { grid-template-columns:1fr 1fr; } .main { padding:20px; } }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">STYLI<span>N</span>X</div>
+    <div class="sidebar-label">Main</div>
+    <div class="sidebar-item active" onclick="showTab('dashboard')"><span class="icon">📊</span> Dashboard</div>
+    <div class="sidebar-item" onclick="showTab('orders')"><span class="icon">📦</span> Orders</div>
+    <div class="sidebar-item" onclick="showTab('customers')"><span class="icon">👥</span> Customers</div>
+    <div class="sidebar-label">Settings</div>
+    <div class="sidebar-item" onclick="showTab('promos')"><span class="icon">🏷️</span> Promo Codes</div>
+    <div class="sidebar-bottom">
+      <a href="index.html">← Back to Store</a>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div class="admin-tab-content active" id="tab-dashboard">
+      <div class="page-header">
+        <h1>Dashboard</h1>
+        <p id="admin-greeting">Welcome back</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card accent">
+          <div class="label">Total Orders</div>
+          <div class="value" id="stat-orders">–</div>
+          <div class="sub">All time</div>
+        </div>
+        <div class="stat-card accent">
+          <div class="label">Total Revenue</div>
+          <div class="value" id="stat-revenue">–</div>
+          <div class="sub">All time</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Customers</div>
+          <div class="value" id="stat-customers">–</div>
+          <div class="sub">Registered</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Pending Orders</div>
+          <div class="value" id="stat-pending">–</div>
+          <div class="sub">Need attention</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><h2>Recent Orders</h2><button class="btn-sm btn-outline" onclick="showTab('orders')">View All</button></div>
+        <div class="section-body"><div id="recent-orders" class="loading">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="admin-tab-content" id="tab-orders">
+      <div class="page-header"><h1>Orders</h1><p>Manage all customer orders</p></div>
+      <div class="section">
+        <div class="section-head"><h2>All Orders</h2><button class="btn-sm btn-primary" onclick="loadOrders()">↻ Refresh</button></div>
+        <div class="section-body"><div id="all-orders" class="loading">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div class="admin-tab-content" id="tab-customers">
+      <div class="page-header"><h1>Customers</h1><p>Registered accounts</p></div>
+      <div class="section">
+        <div class="section-head"><h2>All Customers</h2><button class="btn-sm btn-primary" onclick="loadCustomers()">↻ Refresh</button></div>
+        <div class="section-body"><div id="all-customers" class="loading">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- PROMO CODES -->
+    <div class="admin-tab-content" id="tab-promos">
+      <div class="page-header"><h1>Promo Codes</h1><p>Create and manage discount codes</p></div>
+      <div class="section">
+        <div class="section-head"><h2>Create New Promo Code</h2></div>
+        <div class="promo-form">
+          <div class="form-field">
+            <label>Code</label>
+            <input type="text" id="new-code" placeholder="SUMMER20" style="text-transform:uppercase;">
+          </div>
+          <div class="form-field">
+            <label>Discount Type</label>
+            <select id="new-type" onchange="toggleDiscountField()">
+              <option value="percent">Percentage (%)</option>
+              <option value="fixed">Fixed Amount (₹)</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label id="new-amount-label">Discount (%)</label>
+            <input type="number" id="new-amount" placeholder="10" min="1">
+          </div>
+          <div class="form-field">
+            <label>Min Order (₹)</label>
+            <input type="number" id="new-min" placeholder="0" min="0">
+          </div>
+          <button class="btn-sm btn-primary" onclick="createPromo()" style="height:40px;align-self:end;">Create →</button>
+        </div>
+        <div class="section-body"><div id="all-promos" class="loading">Loading…</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order detail modal -->
+  <div class="modal-overlay" id="order-modal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 id="modal-order-num">Order</h3>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="supabase.js"></script>
+  <script>
+    const ADMIN_EMAIL = 'admin@stylinx.com'; // Change to your email
+
+    // ── Navigation ──────────────────────────────────────────────
+    function showTab(name) {
+      document.querySelectorAll('.admin-tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.sidebar-item').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      document.querySelectorAll('.sidebar-item')[['dashboard','orders','customers','promos'].indexOf(name)].classList.add('active');
+      if (name === 'orders')    loadOrders();
+      if (name === 'customers') loadCustomers();
+      if (name === 'promos')    loadPromos();
+    }
+
+    // ── Init ─────────────────────────────────────────────────────
+    async function initAdmin() {
+      SB.ready(async () => {
+        const user = await SB.getUser();
+        if (!user) { window.location.href = 'login.html'; return; }
+
+        document.getElementById('admin-greeting').textContent = 'Welcome, ' + (user.email || 'Admin');
+
+        loadDashboard();
+        loadOrders();
+        loadPromos();
+      });
+    }
+
+    // ── Dashboard ────────────────────────────────────────────────
+    async function loadDashboard() {
+      const { data: orders } = await SB.client().from('orders').select('*').order('created_at', { ascending: false });
+      const { data: profiles } = await SB.client().from('profiles').select('id');
+
+      const total    = orders ? orders.length : 0;
+      const revenue  = orders ? orders.reduce((s, o) => s + (o.total || 0), 0) : 0;
+      const pending  = orders ? orders.filter(o => o.status === 'pending').length : 0;
+      const customers = profiles ? profiles.length : 0;
+
+      document.getElementById('stat-orders').textContent    = total;
+      document.getElementById('stat-revenue').textContent   = '₹' + revenue.toLocaleString('en-IN');
+      document.getElementById('stat-pending').textContent   = pending;
+      document.getElementById('stat-customers').textContent = customers;
+
+      // Recent orders table
+      const recent = (orders || []).slice(0, 5);
+      renderOrdersTable('recent-orders', recent);
+    }
+
+    // ── Orders ───────────────────────────────────────────────────
+    async function loadOrders() {
+      const el = document.getElementById('all-orders');
+      if (!el) return;
+      el.innerHTML = '<div class="loading">Loading…</div>';
+      const { data: orders } = await SB.client().from('orders').select('*, order_items(*)').order('created_at', { ascending: false });
+      renderOrdersTable('all-orders', orders || []);
+    }
+
+    function renderOrdersTable(containerId, orders) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      if (!orders.length) { el.innerHTML = '<div class="loading">No orders yet.</div>'; return; }
+      el.innerHTML = '<table class="data-table">'
+        + '<thead><tr><th>Order #</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th><th>Action</th></tr></thead>'
+        + '<tbody>' + orders.map(o => {
+            const date = new Date(o.created_at).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+            return '<tr>'
+              + '<td><strong>' + o.order_number + '</strong></td>'
+              + '<td>' + (o.customer_name || '—') + '<br><small style="color:var(--mid)">' + (o.customer_phone || '') + '</small></td>'
+              + '<td>' + date + '</td>'
+              + '<td><strong>₹' + (o.total || 0).toLocaleString('en-IN') + '</strong></td>'
+              + '<td><select class="status-select" onchange="updateOrderStatus(\'' + o.id + '\', this.value)">'
+              +   ['pending','confirmed','shipped','delivered','cancelled'].map(s => '<option value="' + s + '"' + (o.status === s ? ' selected' : '') + '>' + s.charAt(0).toUpperCase()+s.slice(1) + '</option>').join('')
+              + '</select></td>'
+              + '<td><button class="btn-sm btn-outline" onclick="showOrderDetail(' + JSON.stringify(o).replace(/"/g, '&quot;') + ')">View</button></td>'
+              + '</tr>';
+          }).join('')
+        + '</tbody></table>';
+    }
+
+    async function updateOrderStatus(orderId, status) {
+      await SB.client().from('orders').update({ status }).eq('id', orderId);
+      showToast('✓ Status updated to ' + status);
+    }
+
+    function showOrderDetail(order) {
+      document.getElementById('modal-order-num').textContent = order.order_number;
+      const items = order.order_items || [];
+      document.getElementById('modal-body').innerHTML =
+        '<div class="modal-row"><span class="ml">Customer</span><span>' + (order.customer_name || '—') + '</span></div>'
+        + '<div class="modal-row"><span class="ml">Phone</span><span>' + (order.customer_phone || '—') + '</span></div>'
+        + '<div class="modal-row"><span class="ml">Email</span><span>' + (order.customer_email || '—') + '</span></div>'
+        + '<div class="modal-row"><span class="ml">Address</span><span>' + (order.delivery_address || '—') + '</span></div>'
+        + '<div class="modal-row"><span class="ml">Payment</span><span>' + (order.payment_method || '—') + '</span></div>'
+        + '<div class="modal-row"><span class="ml">Promo</span><span>' + (order.promo_code || 'None') + '</span></div>'
+        + '<hr style="border:none;border-top:1px solid var(--sand);margin:12px 0;">'
+        + items.map(i => '<div class="modal-row"><span>' + i.product_name + (i.size?' ('+i.size+')':'') + ' ×' + i.qty + '</span><span>₹' + (i.product_price*i.qty).toLocaleString('en-IN') + '</span></div>').join('')
+        + '<hr style="border:none;border-top:1px solid var(--sand);margin:12px 0;">'
+        + '<div class="modal-row"><span class="ml">Subtotal</span><span>₹' + (order.subtotal||0).toLocaleString('en-IN') + '</span></div>'
+        + '<div class="modal-row"><span class="ml">Shipping</span><span>' + (order.shipping===0?'Free':'₹'+(order.shipping||0).toLocaleString('en-IN')) + '</span></div>'
+        + (order.discount > 0 ? '<div class="modal-row" style="color:#1eb558;"><span>Discount</span><span>−₹' + order.discount.toLocaleString('en-IN') + '</span></div>' : '')
+        + '<div class="modal-row" style="font-weight:700;"><span>Total</span><span>₹' + (order.total||0).toLocaleString('en-IN') + '</span></div>';
+      document.getElementById('order-modal').classList.add('open');
+    }
+
+    function closeModal() { document.getElementById('order-modal').classList.remove('open'); }
+
+    // ── Customers ────────────────────────────────────────────────
+    async function loadCustomers() {
+      const el = document.getElementById('all-customers');
+      if (!el) return;
+      el.innerHTML = '<div class="loading">Loading…</div>';
+      const { data: profiles } = await SB.client().from('profiles').select('*').order('created_at', { ascending: false });
+      if (!profiles || !profiles.length) { el.innerHTML = '<div class="loading">No customers yet.</div>'; return; }
+      el.innerHTML = '<table class="data-table">'
+        + '<thead><tr><th>Name</th><th>Phone</th><th>Address</th><th>Since</th></tr></thead>'
+        + '<tbody>' + profiles.map(p => {
+            const date = new Date(p.created_at).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+            const initials = (p.full_name || '?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+            return '<tr>'
+              + '<td><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;">' + initials + '</div>' + (p.full_name || '—') + '</div></td>'
+              + '<td>' + (p.phone || '—') + '</td>'
+              + '<td style="max-width:200px;font-size:0.8rem;">' + (p.address || '—') + '</td>'
+              + '<td>' + date + '</td>'
+              + '</tr>';
+          }).join('')
+        + '</tbody></table>';
+    }
+
+    // ── Promo codes ──────────────────────────────────────────────
+    async function loadPromos() {
+      const el = document.getElementById('all-promos');
+      if (!el) return;
+      el.innerHTML = '<div class="loading">Loading…</div>';
+      const { data } = await SB.client().from('promo_codes').select('*').order('created_at', { ascending: false });
+      if (!data || !data.length) { el.innerHTML = '<div class="loading">No promo codes yet.</div>'; return; }
+      el.innerHTML = '<table class="data-table">'
+        + '<thead><tr><th>Code</th><th>Discount</th><th>Min Order</th><th>Status</th><th>Action</th></tr></thead>'
+        + '<tbody>' + data.map(p => '<tr>'
+            + '<td><strong>' + p.code + '</strong></td>'
+            + '<td>' + (p.discount_percent ? p.discount_percent + '%' : '₹' + (p.discount_fixed||0).toLocaleString('en-IN')) + '</td>'
+            + '<td>₹' + (p.min_order||0).toLocaleString('en-IN') + '</td>'
+            + '<td><span class="badge ' + (p.active?'badge-active':'badge-inactive') + '">' + (p.active?'Active':'Inactive') + '</span></td>'
+            + '<td><button class="btn-sm btn-danger" onclick="deletePromo(\'' + p.id + '\')">Delete</button></td>'
+            + '</tr>').join('')
+        + '</tbody></table>';
+    }
+
+    function toggleDiscountField() {
+      const type = document.getElementById('new-type').value;
+      document.getElementById('new-amount-label').textContent = type === 'percent' ? 'Discount (%)' : 'Discount (₹)';
+    }
+
+    async function createPromo() {
+      const code   = document.getElementById('new-code').value.trim().toUpperCase();
+      const type   = document.getElementById('new-type').value;
+      const amount = parseInt(document.getElementById('new-amount').value);
+      const min    = parseInt(document.getElementById('new-min').value) || 0;
+
+      if (!code || !amount) { showToast('Please fill in code and discount amount.', '#c0392b'); return; }
+
+      const row = { code, min_order: min, active: true };
+      if (type === 'percent') row.discount_percent = amount;
+      else row.discount_fixed = amount;
+
+      const { error } = await SB.client().from('promo_codes').insert(row);
+      if (error) { showToast('Error: ' + error.message, '#c0392b'); return; }
+
+      document.getElementById('new-code').value = '';
+      document.getElementById('new-amount').value = '';
+      document.getElementById('new-min').value = '';
+      showToast('✓ Promo code ' + code + ' created!');
+      loadPromos();
+    }
+
+    async function deletePromo(id) {
+      if (!confirm('Delete this promo code?')) return;
+      await SB.client().from('promo_codes').delete().eq('id', id);
+      showToast('Promo code deleted.', '#6b6560');
+      loadPromos();
+    }
+
+    function showToast(msg, color) {
+      color = color || '#0e0d0b';
+      const t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText = 'position:fixed;bottom:28px;right:28px;background:'+color+';color:#fff;padding:14px 22px;border-radius:2px;font-size:0.82rem;z-index:99999;opacity:0;transition:opacity 0.25s;font-family:DM Sans,sans-serif;';
+      document.body.appendChild(t);
+      setTimeout(() => t.style.opacity = '1', 10);
+      setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 2500);
+    }
+
+    // Close modal on backdrop click
+    document.getElementById('order-modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+    initAdmin();
+  </script>
+</body>
+</html>

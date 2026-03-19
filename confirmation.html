@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Confirmed – STYLINX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="produits.css">
+  <style>
+    .confirm-page { padding: 80px 7%; max-width: 680px; }
+
+    /* Success animation */
+    .confirm-icon-wrap {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: #f0faf4; border: 2px solid #1eb558;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; margin-bottom: 32px;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .confirm-eyebrow { font-size:0.68rem; letter-spacing:0.3em; text-transform:uppercase; color:#1eb558; font-weight:600; margin-bottom:8px; }
+    .confirm-title { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,4vw,2.8rem); font-weight:900; color:var(--ink); margin-bottom:12px; }
+    .confirm-sub { font-size:0.95rem; color:var(--mid); line-height:1.7; margin-bottom:36px; max-width:480px; }
+    .confirm-sub strong { color:var(--ink); }
+
+    /* Order number */
+    .order-number {
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 14px 20px; background: var(--cream); border: 1px solid var(--sand);
+      border-radius: 2px; margin-bottom: 36px;
+    }
+    .order-number .label { font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--mid); display:block; }
+    .order-number .value { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; color:var(--ink); }
+
+    /* Order recap */
+    .recap-box {
+      border: 1px solid var(--sand); margin-bottom: 36px; overflow: hidden;
+    }
+    .recap-header {
+      padding: 14px 20px; background: var(--ink); color: #fff;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    }
+    .recap-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 13px 20px; border-bottom: 1px solid var(--sand);
+      font-size: 0.88rem;
+    }
+    .recap-row:last-child { border-bottom: none; }
+    .recap-row .rname { color: var(--ink); font-weight:500; }
+    .recap-row .rqty  { color: var(--mid); font-size:0.78rem; }
+    .recap-row .rprice { font-weight: 700; color: var(--ink); }
+    .recap-total {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 20px; background: var(--cream); border-top: 2px solid var(--sand);
+    }
+    .recap-total .label { font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--mid); font-weight:600; }
+    .recap-total .value { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; color:var(--ink); }
+
+    /* Actions */
+    .confirm-actions { display: flex; flex-direction: column; gap: 10px; max-width: 400px; }
+    .confirm-actions a, .confirm-actions button {
+      display: flex; align-items: center; justify-content: center;
+      padding: 15px 24px; font-family:'DM Sans',sans-serif;
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+      border-radius: 2px; cursor: pointer; transition: all 0.18s;
+      text-decoration: none; border: none;
+    }
+    .confirm-actions a:hover, .confirm-actions button:hover { transform: translateY(-2px); }
+    .btn-wa-confirm { background: #25d366; color: #fff; }
+    .btn-wa-confirm:hover { background: #1eb558 !important; }
+    .btn-shop { background: var(--ink); color: #fff; }
+    .btn-shop:hover { background: var(--accent) !important; }
+    .btn-wl { background: transparent; color: var(--mid); border: 1.5px solid var(--sand); }
+    .btn-wl:hover { border-color: var(--ink) !important; color: var(--ink) !important; }
+
+    /* Steps */
+    .next-steps {
+      margin: 40px 0; padding: 24px; background: var(--cream); border: 1px solid var(--sand);
+    }
+    .next-steps h3 { font-family:'Playfair Display',serif; font-size:1rem; margin-bottom:16px; color:var(--ink); }
+    .steps-list { list-style: none; padding: 0; }
+    .steps-list li {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 10px 0; border-bottom: 1px solid var(--sand); font-size: 0.85rem; color: var(--mid);
+    }
+    .steps-list li:last-child { border-bottom: none; }
+    .steps-list .step-num {
+      min-width: 24px; height: 24px; background: var(--ink); color: #fff;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: 700; flex-shrink: 0;
+    }
+    .steps-list li span { line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="marquee-bar"><div class="marquee-inner">
+    <span>Thank you for your order!</span><span>STYLINX — Simple. Classy. Trendy.</span>
+    <span>Free Delivery Over ₹3,000</span><span>Easy Returns — 30 Days</span>
+    <span>Thank you for your order!</span><span>STYLINX — Simple. Classy. Trendy.</span>
+    <span>Free Delivery Over ₹3,000</span><span>Easy Returns — 30 Days</span>
+  </div></div>
+
+  <header class="header">
+    <a href="index.html" class="logo">STYLI<span>N</span>X</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="homme.html">Men</a>
+      <a href="femme.html">Women</a>
+      <a href="enfant.html">Kids</a>
+    </nav>
+    <div class="header-actions">
+      <a href="wishlist.html" aria-label="Wishlist">♡</a>
+      <a href="panier.html" aria-label="Cart">🛒</a>
+      <a href="login.html" aria-label="Account">👤</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="confirm-page">
+      <div class="confirm-icon-wrap">✓</div>
+      <p class="confirm-eyebrow">Order Confirmed</p>
+      <h1 class="confirm-title">Thank you<br>for your order!</h1>
+      <p class="confirm-sub" id="confirm-sub">
+        Your order has been received. Our team will contact you shortly at the details provided to confirm delivery.
+      </p>
+
+      <div class="order-number">
+        <div>
+          <span class="label">Order Number</span>
+          <span class="value" id="order-num">–</span>
+        </div>
+        <div style="width:1px;height:36px;background:var(--sand);"></div>
+        <div>
+          <span class="label">Date</span>
+          <span class="value" id="order-date">–</span>
+        </div>
+        <div style="width:1px;height:36px;background:var(--sand);"></div>
+        <div>
+          <span class="label">Total</span>
+          <span class="value" id="order-total">–</span>
+        </div>
+      </div>
+
+      <div class="recap-box" id="order-recap"></div>
+
+      <div class="next-steps">
+        <h3>What happens next?</h3>
+        <ul class="steps-list">
+          <li><div class="step-num">1</div><span>Our team reviews your order and confirms availability within 24 hours.</span></li>
+          <li><div class="step-num">2</div><span>You'll be contacted on WhatsApp to confirm your delivery address and payment.</span></li>
+          <li><div class="step-num">3</div><span>Your order is packed and shipped. Delivery in 3–5 business days.</span></li>
+        </ul>
+      </div>
+
+      <div class="confirm-actions">
+        <a class="btn-wa-confirm" id="btn-wa" href="#">📱 Confirm on WhatsApp</a>
+        <a class="btn-shop" href="index.html">Continue Shopping →</a>
+        <a class="btn-wl" href="wishlist.html">♡ View My Wishlist</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-main">
+      <div class="footer-brand"><a href="index.html" class="logo">STYLINX</a><p>Simple. Classy. Trendy.</p></div>
+      <div class="footer-col"><h4>Navigate</h4><ul>
+        <li><a href="index.html">Home</a></li><li><a href="homme.html">Men</a></li>
+        <li><a href="femme.html">Women</a></li><li><a href="enfant.html">Kids</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Contact</h4>
+        <p>📱 <a href="https://wa.me/919886400949">+91 98864 00949</a></p>
+        <p>✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dbb8b4b5afbab8af9ba8afa2b7b2b5a3f5b8b4b6">[email&#160;protected]</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 STYLINX – All rights reserved</p><p>Simple. Classy. Trendy.</p>
+    </div>
+  </footer>
+
+  <script src="supabase.js"></script>
+  <script>
+    function initConfirmation() {
+      // Read last order saved by paiement.html
+      let order = null;
+      try { order = JSON.parse(localStorage.getItem('last_order')); } catch(e) {}
+
+      if (!order) {
+        document.getElementById('order-num').textContent   = 'N/A';
+        document.getElementById('order-date').textContent  = '–';
+        document.getElementById('order-total').textContent = '–';
+        document.getElementById('order-recap').style.display = 'none';
+        return;
+      }
+
+      // Populate header fields
+      const dateStr = new Date(order.created_at || Date.now()).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+      document.getElementById('order-num').textContent   = order.order_number || '–';
+      document.getElementById('order-date').textContent  = dateStr;
+      document.getElementById('order-total').textContent = '₹' + (order.total || 0).toLocaleString('en-IN');
+
+      // Personalise greeting
+      if (order.customer_name) {
+        document.getElementById('confirm-sub').innerHTML =
+          'Hi <strong>' + order.customer_name + '</strong>, your order has been received. '
+          + 'Our team will contact you shortly on <strong>' + (order.customer_phone || 'WhatsApp') + '</strong> to confirm delivery.';
+      }
+
+      // Recap table
+      const items = order.items || [];
+      const recap = document.getElementById('order-recap');
+      if (items.length > 0) {
+        const rows = items.map(function(i) {
+          return '<div class="recap-row">'
+            + '<span><span class="rname">' + i.name + '</span>'
+            + (i.size ? ' <span class="rqty">— Size ' + i.size + '</span>' : '')
+            + ' <span class="rqty">× ' + (i.qty||1) + '</span></span>'
+            + '<span class="rprice">&#8377;' + (i.price*(i.qty||1)).toLocaleString('en-IN') + '</span>'
+            + '</div>';
+        }).join('');
+
+        const discountRow = order.discount > 0
+          ? '<div class="recap-row" style="color:#1eb558;font-size:0.82rem;"><span>Promo (' + (order.promo_code||'') + ')</span><span>&#8722;&#8377;' + order.discount.toLocaleString('en-IN') + '</span></div>'
+          : '';
+
+        recap.innerHTML =
+          '<div class="recap-header">Order Summary</div>'
+          + rows
+          + '<div class="recap-row" style="color:var(--mid);font-size:0.82rem;"><span>Shipping</span><span>' + (order.shipping===0?'&#10003; Free':'&#8377;'+order.shipping.toLocaleString('en-IN')) + '</span></div>'
+          + discountRow
+          + '<div class="recap-total"><span class="label">Total Paid</span><span class="value">&#8377;' + (order.total||0).toLocaleString('en-IN') + '</span></div>';
+      } else {
+        recap.style.display = 'none';
+      }
+
+      // WhatsApp confirm button
+      let msg = 'Hello STYLINX! Confirming my order *' + order.order_number + '*\n';
+      msg += 'Name: ' + (order.customer_name||'') + '\n';
+      msg += 'Phone: ' + (order.customer_phone||'') + '\n';
+      msg += 'Address: ' + (order.delivery_address||'') + '\n';
+      msg += 'Total: \u20b9' + (order.total||0).toLocaleString('en-IN');
+      document.getElementById('btn-wa').href = 'https://wa.me/919886400949?text=' + encodeURIComponent(msg);
+    }
+
+    initConfirmation();
+  </script>
+<script src="supabase.js"></script>
+</body>
+</html>
