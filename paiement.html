@@ -261,6 +261,22 @@
       localStorage.setItem('last_order', JSON.stringify({ ...order, items: cart }));
       localStorage.removeItem('checkout_discount');
       localStorage.removeItem('checkout_promo');
+      // Remove purchased products from wishlist
+let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+wishlist = wishlist.filter(wish =>
+    !cart.some(item => item.name.startsWith(wish.name))
+);
+
+localStorage.setItem('wishlist', JSON.stringify(wishlist));
+
+// Clear cart
+if (window.SB) {
+    await SB.clearCart();
+}
+
+localStorage.removeItem('cart');
+cart = [];
 
       if (method === 'whatsapp') {
         // Build WhatsApp message
