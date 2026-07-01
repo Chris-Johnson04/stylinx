@@ -279,7 +279,13 @@
 
         window.open('https://wa.me/919886400949?text=' + encodeURIComponent(msg), '_blank');
       }
+// Clear cart
+if (window.SB) {
+    await SB.clearCart();
+}
 
+localStorage.removeItem('cart');
+cart = [];
       // Redirect to confirmation
       setTimeout(() => { window.location.href = 'confirmation.html'; }, method === 'whatsapp' ? 800 : 400);
     }
