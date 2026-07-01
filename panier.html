@@ -424,24 +424,77 @@
         render();
       }
     }
-    function payAll() {
-      if (!cart.length) { showToast('Your cart is empty.'); return; }
-      // Save discount info for checkout
-      const sub = subtotal(), ship = shipping(sub);
+        async function payAll() {
+      if (!cart.length) {
+        showToast('Your cart is empty.');
+        return;
+      }
+
+      const sub = subtotal();
       localStorage.setItem('checkout_discount', activeDiscount);
       localStorage.setItem('checkout_promo', activePromoCode);
+
       window.location.href = 'paiement.html';
     }
-    function orderWhatsApp() {
-      if (!cart.length) { showToast('Your cart is empty.'); return; }
-      const sub = subtotal(), ship = shipping(sub), grand = sub + ship - activeDiscount;
-      let msg = 'Hello STYLINX! I would like to order:\n\n';
-      cart.forEach(i => { msg += '• ' + (i.qty||1) + '\u00d7 ' + i.name + (i.size ? ' (Size: '+i.size+')' : '') + ' \u2014 \u20b9' + (i.price*(i.qty||1)).toLocaleString('en-IN') + '\n'; });
-      msg += '\nSubtotal: \u20b9' + sub.toLocaleString('en-IN');
-      if (activeDiscount > 0) msg += '\nPromo (' + activePromoCode + '): \u2212\u20b9' + activeDiscount.toLocaleString('en-IN');
-      msg += '\nShipping: ' + (ship === 0 ? 'Free' : '\u20b9' + ship.toLocaleString('en-IN'));
-      msg += '\nTotal: \u20b9' + grand.toLocaleString('en-IN');
-      window.open('https://wa.me/919886400949?text=' + encodeURIComponent(msg));
+    async function orderWhatsApp() {
+      if (!cart.length) {
+        showToast('Your cart is empty.');
+        return;
+      }
+
+      const sub = subtotal();
+      const ship = shipping(sub);
+      const grand = sub + ship - activeDiscount;
+
+      let msg = 'Hello STYLINX! I would like to order:
+
+';
+
+      cart.forEach(i => {
+        msg += '• ' + (i.qty || 1) + '× ' + i.name;
+        if (i.size) msg += ' (Size: ' + i.size + ')';
+        msg += ' — ₹' + (i.price * (i.qty || 1)).toLocaleString('en-IN') + '
+';
+      });
+
+      msg += '
+Subtotal: ₹' + sub.toLocaleString('en-IN');
+
+      if (activeDiscount > 0) {
+        msg += '
+Promo (' + activePromoCode + '): −₹' + activeDiscount.toLocaleString('en-IN');
+      }
+
+      msg += '
+Shipping: ' + (ship === 0 ? 'Free' : '₹' + ship.toLocaleString('en-IN'));
+      msg += '
+Total: ₹' + grand.toLocaleString('en-IN');
+
+      window.open(
+        'https://wa.me/919886400949?text=' + encodeURIComponent(msg),
+        '_blank'
+      );
+
+      if (confirm('Have you sent your WhatsApp order?')) {
+
+        if (window.SB) {
+          await SB.clearCart();
+        }
+
+        localStorage.removeItem('cart');
+
+        cart = [];
+        activeDiscount = 0;
+        activePromoCode = '';
+
+        render();
+
+        if (window.SB) {
+          SB.updateCartBadge();
+        }
+
+        showToast('✅ Cart cleared successfully.');
+      }
     }
 
     loadCart();
