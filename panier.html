@@ -394,36 +394,63 @@
     const var_mid = '#6b6560';
 
     // ── Cart actions ───────────────────────────────────────────
-    async function changeQty(idx, delta) {
-      const item = cart[idx];
-      const newQty = Math.max(1, (item.qty || 1) + delta);
-      if (item.id) { await SB.updateCartQty(item.id, newQty); }
-      cart[idx].qty = newQty;
-      render();
+async function changeQty(idx, delta) {
+    const item = cart[idx];
+    const newQty = Math.max(1, (item.qty || 1) + delta);
+
+    if (item.id) {
+        await SB.updateCartQty(item.id, newQty);
     }
+
+    cart[idx].qty = newQty;
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    render();
+}
     async function setQty(idx, val) {
-      const n = parseInt(val);
-      if (!isNaN(n) && n >= 1) {
-        if (cart[idx].id) await SB.updateCartQty(cart[idx].id, n);
+    const n = parseInt(val);
+
+    if (!isNaN(n) && n >= 1) {
+
+        if (cart[idx].id) {
+            await SB.updateCartQty(cart[idx].id, n);
+        }
+
         cart[idx].qty = n;
+        localStorage.setItem('cart', JSON.stringify(cart));
+
         render();
-      }
     }
+}
     async function removeItem(idx) {
-      const item = cart[idx];
-      if (item.id) await SB.removeFromCart(item.id);
-      cart.splice(idx, 1);
-      render();
-      showToast('✕  ' + item.name + ' removed', '#6b6560');
+    const item = cart[idx];
+
+    if (item.id) {
+        await SB.removeFromCart(item.id);
     }
+
+    cart.splice(idx, 1);
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    render();
+
+    showToast('✕ ' + item.name + ' removed', '#6b6560');
+}
     async function clearCart() {
-      if (!cart.length) return;
-      if (confirm('Remove all items from your cart?')) {
+    if (!cart.length) return;
+
+    if (confirm('Remove all items from your cart?')) {
+
         await SB.clearCart();
+
         cart = [];
+
+        localStorage.removeItem('cart');
+
         render();
-      }
     }
+}
     function payAll() {
       if (!cart.length) { showToast('Your cart is empty.'); return; }
       // Save discount info for checkout
